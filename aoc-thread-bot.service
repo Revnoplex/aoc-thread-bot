@@ -1,0 +1,15 @@
+[Unit]
+Description=Systemd service for running aoc-thread-bot in production
+After=network.target
+
+[Service]
+ExecStart=/home/server-admin/bots/aoc-thread-bot/main.py --systemd
+WorkingDirectory=/home/server-admin/bots/aoc-thread-bot
+StandardOutput=inherit
+StandardError=inherit
+Restart=on-failure
+User=server-admin
+Type=notify
+
+[Install]
+WantedBy=multi-user.target
