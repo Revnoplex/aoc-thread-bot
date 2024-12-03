@@ -47,6 +47,7 @@ class AoCTBot(discord.Bot):
         super().__init__(*args, **kwargs)
 
         self.thread_task.start()
+        self.countdown_status.start()
         self.aoc_channel = None
 
     async def on_ready(self):
@@ -74,6 +75,32 @@ class AoCTBot(discord.Bot):
                 "Missing appropriate permissions to create thread. "
                 "Please make sure I have 'send messages' and "
                 "'create public threads' permissions in the set channel"
+            )
+
+    @tasks.loop(minutes=1)
+    async def countdown_status(self):
+        await self.wait_until_ready()
+        now = datetime.datetime.now(tz=datetime.timezone(datetime.timedelta(hours=-5)))
+        if (now.month == 12 and 1 <= now.day < 25) or (now.month == 11 and now.day == 30):
+            next_aoc = datetime.datetime(
+                now.year, now.month, now.day, 0, 0,
+                tzinfo=datetime.timezone(datetime.timedelta(hours=-5))
+            ) + datetime.timedelta(days=1)
+            until_aoc = next_aoc - now
+
+            hours = until_aoc.total_seconds() // 3600
+            minutes = until_aoc.total_seconds() % 3600 // 60
+
+            hour_string = (f"{int(hours)} hr" + ("s" if hours != 1 else "")) if hours else ""
+            and_string = " and " if hours and minutes else ""
+            minute_string = (f"{int(minutes)} min" + ("s" if minutes != 1 else "")) if minutes else ""
+
+            await self.change_presence(
+                activity=discord.Game(f"in {hour_string}{and_string}{minute_string}")
+            )
+        else:
+            await self.change_presence(
+                activity=discord.Game(f"next time")
             )
 
     @tasks.loop(
