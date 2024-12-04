@@ -94,9 +94,10 @@ class AoCTBot(discord.Bot):
             hour_string = (f"{int(hours)} hr" + ("s" if hours != 1 else "")) if hours else ""
             and_string = " and " if hours and minutes else ""
             minute_string = (f"{int(minutes)} min" + ("s" if minutes != 1 else "")) if minutes else ""
+            sub_minute = "less than a minute" if not minutes and not hours else ""
 
             await self.change_presence(
-                activity=discord.Game(f"in {hour_string}{and_string}{minute_string}")
+                activity=discord.Game(f"in {hour_string}{and_string}{minute_string}{sub_minute}")
             )
         else:
             await self.change_presence(
