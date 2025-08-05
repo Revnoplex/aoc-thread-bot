@@ -124,10 +124,6 @@ intents = discord.Intents.default()
 client = AoCTBot(intents=intents)
 
 
-def namer(name):
-    return name + ".gz"
-
-
 def rotator(source, destination):
     with open(source, 'rb') as f_in:
         with gzip.open(destination, 'wb') as f_out:
@@ -146,7 +142,7 @@ handler = RotatingFileHandler(
     backupCount=16
 )
 handler.rotator = rotator
-handler.namer = namer
+handler.namer = lambda name: name + ".gz"
 # noinspection SpellCheckingInspection
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
