@@ -100,8 +100,13 @@ class AoCTBot(discord.Bot):
                 activity=discord.Game(f"in {hour_string}{and_string}{minute_string}{sub_minute}")
             )
         else:
+            next_aoc = datetime.datetime(
+                now.year+1 if now.month == 12 else now.year, 12, 1, 0, 0,
+                tzinfo=datetime.timezone(datetime.timedelta(hours=-5))
+            )
+            until_aoc = next_aoc - now
             await self.change_presence(
-                activity=discord.Game(f"next time")
+                activity=discord.Game(f"in over {until_aoc.days} day{'s' if until_aoc.days != 1 else ''}")
             )
 
     @tasks.loop(
