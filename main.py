@@ -81,7 +81,7 @@ class AoCTBot(discord.Bot):
     async def countdown_status(self):
         await self.wait_until_ready()
         now = datetime.datetime.now(tz=datetime.timezone(datetime.timedelta(hours=-5)))
-        if (now.month == 12 and 1 <= now.day < 25) or (now.month == 11 and now.day == 30):
+        if (now.month == 12 and 1 <= now.day < 12) or (now.month == 11 and now.day == 30):
             next_aoc = datetime.datetime(
                 now.year, now.month, now.day, 0, 0,
                 tzinfo=datetime.timezone(datetime.timedelta(hours=-5))
@@ -116,7 +116,7 @@ class AoCTBot(discord.Bot):
         await self.wait_until_ready()
 
         current_time = datetime.datetime.now(tz=datetime.timezone.utc)
-        if current_time.month != 12 or (not 1 <= current_time.day <= 25):
+        if current_time.month != 12 or (not 1 <= current_time.day <= 12):
             return
 
         thread_title = f"\U0001f31f AOC Day {current_time.day} Answers Thread"
